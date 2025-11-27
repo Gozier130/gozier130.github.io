@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>张三 (San Zhang) - Academic Homepage</title>
+    <!-- 引入 Inter 字体，最接近 Apple 官方字体 San Francisco 的开源替代品 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f5f5f7;       /* Apple 经典的浅灰背景 */
+            --card-bg: #ffffff;        /* 卡片白色 */
+            --text-main: #1d1d1f;      /* 近乎黑色的深灰 */
+            --text-secondary: #86868b; /* 辅助灰色 */
+            --accent-color: #0071e3;   /* Apple Blue */
+            --nav-bg: rgba(0, 0, 0, 0.8); /* 顶部导航栏深色半透明 */
+            --nav-text: #f5f5f7;
+            --gap: 24px;
+            --radius: 28px;            /* 大圆角 */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- 导航栏 (Frosted Glass Effect) --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 48px;
+            background: var(--nav-bg);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-content {
+            display: flex;
+            gap: 40px;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .nav-content a {
+            color: #d6d6d6;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-content a:hover {
+            color: #fff;
+        }
+
+        /* --- 通用容器 --- */
+        .container {
+            max-width: 980px; /* Apple 常用内容宽度 */
+            margin: 0 auto;
+            padding: 80px 20px 40px;
+        }
+
+        /* --- Hero 区域 (个人简介) --- */
+        .hero {
+            text-align: center;
+            padding: 100px 0 80px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 24px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 980px; /* 胶囊形状 */
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: transform 0.2s ease;
+        }
+
+        .hero-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* --- 栅格系统 (Bento Grid) --- */
+        .section-title {
+            font-size: 40px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            margin-top: 60px;
+            letter-spacing: -0.01em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--gap);
+        }
+
+        /* 卡片风格 */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: 2px 4px 12px rgba(0,0,0,0.02);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 4px 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .card-large {
+            grid-column: span 2; /* 跨两列的大卡片 */
+        }
+        
+        @media (max-width: 768px) {
+            .card-large { grid-column: span 1; }
+            .hero h1 { font-size: 40px; }
+            .hero p { font-size: 18px; }
+        }
+
+        .card h3 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background-color: #eee;
+            border-radius: 18px;
+            margin-top: 20px;
+            object-fit: cover;
+        }
+
+        /* --- Publications List (简洁风格) --- */
+        .pub-list {
+            list-style: none;
+        }
+
+        .pub-item {
+            padding: 30px 0;
+            border-bottom: 1px solid #e5e5e5;
+            transition: opacity 0.3s ease;
+        }
+        
+        .pub-item:hover {
+            opacity: 0.7;
+        }
+
+        .pub-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-main);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .pub-authors {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .pub-meta {
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-color);
+        }
+
+        /* --- 动画类 (Scroll Reveal) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- 页脚 --- */
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            color: var(--text-secondary);
+            font-size: 12px;
+            background: #f5f5f7;
+            border-top: 1px solid #e5e5e5;
+            margin-top: 60px;
+        }
+
+        /* 占位图样式 */
+        .placeholder-box {
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <nav>
+        <div class="nav-content">
+            <a href="#">Home</a>
+            <a href="#about">About</a>
+            <a href="#news">News</a>
+            <a href="#publications">Publications</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <!-- Hero Section: 个人简介 -->
+        <header class="hero" id="about">
+            <!-- 头像区域 -->
+            <div style="width:120px; height:120px; border-radius:50%; background:#ddd; margin:0 auto 24px; overflow:hidden;">
+                <!-- 请替换为你的头像 -->
+                <img src="me.jpg" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            
+            <h1>San Zhang (张三)</h1>
+            <p>Ph.D. Candidate at Apple Style University.<br>Researching AI, Human-Computer Interaction, and Design.</p>
+            
+            <div style="margin-top: 20px;">
+                <a href="#" class="hero-btn">Download CV</a>
+                <a href="#" class="hero-btn" style="background:transparent; color:#0071e3; margin-left:10px;">Google Scholar &rsaquo;</a>
+            </div>
+        </header>
+
+        <!-- News Section: 像 Apple 的产品特性展示一样 -->
+        <h2 class="section-title reveal">Latest News</h2>
+        <div class="grid reveal">
+            <!-- News Card 1 -->
+            <div class="card">
+                <div>
+                    <span style="font-size:12px; font-weight:700; color:#86868b; text-transform:uppercase;">Nov 2023</span>
+                    <h3>Paper Accepted</h3>
+                    <p>Our paper on "Minimalist Design in AI" was accepted to CHI 2024.</p>
+                </div>
+            </div>
+            <!-- News Card 2 -->
+            <div class="card">
+                <div>
+                    <span style="font-size:12px; font-weight:700; color:#86868b; text-transform:uppercase;">Oct 2023</span>
+                    <h3>Invited Talk</h3>
+                    <p>Gave a talk at Tech University about the future of interface design.</p>
+                </div>
+            </div>
+            <!-- News Card 3 -->
+            <div class="card">
+                <div>
+                    <span style="font-size:12px; font-weight:700; color:#86868b; text-transform:uppercase;">Sep 2023</span>
+                    <h3>Internship</h3>
+                    <p>Started research internship at Big Tech Company.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Highlights: 采用 Bento Grid (便当盒) 布局 -->
+        <h2 class="section-title reveal">Research Highlights</h2>
+        <div class="grid reveal">
+            
+            <!-- 大卡片 -->
+            <div class="card card-large">
+                <div style="padding-bottom: 20px;">
+                    <span style="color:var(--accent-color); font-weight:600; font-size:14px;">Selected Project</span>
+                    <h3>The Future of Interaction</h3>
+                    <p>Exploring how gestures and eye-tracking can redefine our daily workflow without physical controllers.</p>
+                </div>
+                <!-- 占位图：建议使用简单的几何图形或高质量渲染图 -->
+                <div class="card-image placeholder-box">Project Image Area</div>
+            </div>
+
+            <!-- 小卡片 1 -->
+            <div class="card">
+                <h3>Visual Learning</h3>
+                <p>Self-supervised learning methods for extracting semantics from unlabeled video data.</p>
+                <div class="card-image placeholder-box" style="height: 120px;">Image</div>
+            </div>
+
+            <!-- 小卡片 2 -->
+            <div class="card">
+                <h3>Generative UI</h3>
+                <p>Using LLMs to generate user interfaces on the fly based on user intent.</p>
+                <div class="card-image placeholder-box" style="height: 120px;">Image</div>
+            </div>
+        </div>
+
+        <!-- Publications Section -->
+        <h2 class="section-title reveal" id="publications">Selected Publications</h2>
+        <div class="reveal">
+            <ul class="pub-list">
+                
+                <li class="pub-item">
+                    <a href="#" class="pub-title">Deep Learning for Minimalist Web Design Generation</a>
+                    <div class="pub-authors"><b>San Zhang</b>, Li Si, Wang Wu</div>
+                    <div class="pub-meta">CVPR 2024 · <span style="color:var(--text-main); cursor:pointer;">[PDF]</span> <span style="color:var(--text-main); cursor:pointer;">[Code]</span></div>
+                </li>
+
+                <li class="pub-item">
+                    <a href="#" class="pub-title">Understanding User Perception of Apple-style Animations</a>
+                    <div class="pub-authors"><b>San Zhang</b>, John Doe</div>
+                    <div class="pub-meta">CHI 2023 · <span style="color:var(--text-main); cursor:pointer;">[PDF]</span></div>
+                </li>
+
+                <li class="pub-item">
+                    <a href="#" class="pub-title">A Survey on Aesthetics in Human-Computer Interaction</a>
+                    <div class="pub-authors">Alice Smith, <b>San Zhang</b></div>
+                    <div class="pub-meta">Journal of HCI · <span style="color:var(--text-main); cursor:pointer;">[PDF]</span></div>
+                </li>
+
+            </ul>
+        </div>
+        
+        <!-- Contact Section -->
+        <div class="card card-large reveal" id="contact" style="margin-top: 60px; text-align:center; align-items:center; background: #fff;">
+            <h3>Let's Connect</h3>
+            <p style="margin-bottom: 20px;">Open to collaborations and research discussions.</p>
+            <a href="mailto:san.zhang@example.com" class="hero-btn">san.zhang@example.com</a>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Copyright © 2024 San Zhang. Designed with Apple Style.</p>
+    </footer>
+
+    <!-- 简单的滚动显现脚本 -->
+    <script>
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // 初始化运行一次以显示首屏内容
+        reveal();
+    </script>
+</body>
+</html>
